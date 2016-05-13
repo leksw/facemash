@@ -14,8 +14,8 @@ class RandomQuerySet(models.QuerySet):
         if len(list_id) < 2:
             return self.none()
         first_id = random.choice(list_id)
-        list_id2 = list_id.exclude(id=first_id)
-        second_id = random.choice(list_id2)
+        list_id_without_first_id = list_id.exclude(id=first_id)
+        second_id = random.choice(list_id_without_first_id)
         return self.filter(id__in=[first_id, second_id])
 
 

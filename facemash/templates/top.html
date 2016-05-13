@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+ {% if top_person %}
+    <div class="row">
+      {% for top in top_person %}
+      <div class="col-xs-6 col-md-12">
+        <p class="thumbnail">
+          <img src="{{ top.image.url }}" alt="{{ top.name }}">
+        </p>
+         <p>{{ top.name }} - {{ top.rate }}</p>
+      </div>
+      {% endfor %}
+    </div>
+{% else %}
+<p>{% trans 'Person db is empty yet!' %}</p>
+{% endif %}
+{% endblock content %}

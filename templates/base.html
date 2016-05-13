@@ -10,7 +10,7 @@
     
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'facemash/base.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'facemash/css/base.css' %}" />
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -20,7 +20,8 @@
   </head>
   <body>
     <div class="container">
-
+        {% include "navbar.html" %}
+        
         {% block content %}{% endblock content %}
        
         <hr>
@@ -33,5 +34,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script type="text/javascript" src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/jquery.cookie/jquery.cookie.js' %}"></script>
+    <script type="text/javascript" src="{% static 'facemash/js/facemash.js' %}"></script>
   </body>
 </html>

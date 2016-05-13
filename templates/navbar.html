@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="row">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="{% url 'top' %}">Top 10</a></li>
+            <li role="presentation"><a href="#">About</a></li>
+            <li role="presentation"><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted"><a href="{% url 'home' %}">{% trans 'Facemash' %}</a> 
+            <small>({% trans 'clone' %})</small>
+        </h3>
+      </div>
+</div>

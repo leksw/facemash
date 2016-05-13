@@ -15,14 +15,15 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--path',
-            action='store',
-            dest='path',
+            '--folder',
+            action='store_true',
+            dest='folder',
             default=settings.MEDIA_ROOT,
-            help='Load images from direction of this path')
+            help='Load images from the folder\
+                  that is in settings.MEDIA_ROOT directory')
 
     def handle(self, *args, **options):
-        path = options['path']
+        path = options['folder']
 
         # Check if pick directory than add it to path.
         if path != settings.MEDIA_ROOT:
@@ -43,7 +44,7 @@ class Command(BaseCommand):
                 count += 1
         if not count:
             self.stdout.write(
-                self.style.ERROR('Media direction is empty %s' % path))
+                self.style.ERROR('Media directory is empty %s' % path))
         else:
             self.stdout.write(
                 self.style.SUCCESS('Successfully loaded %s images' % count))
