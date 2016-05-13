@@ -2,10 +2,12 @@
 from __future__ import unicode_literals
 
 from io import BytesIO
+import os
+import shutil
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils.six import StringIO
 from django.core.files.storage import default_storage
 
@@ -15,6 +17,15 @@ from facemash.models import Person
 
 
 PHOTO_FILE = 'photo.jpg'
+
+
+def makedirs(path):
+    try:
+        os.makedirs(path)
+    except OSError as e:
+        if e.errno == 17:
+            # Dir already exists. No biggie.
+            pass
 
 
 def test_image():
@@ -34,13 +45,32 @@ def test_image():
 
 
 class LoadimageTest(TestCase):
+    @override_settings(DEFAULT_FILE_STORAGE='facemash.storage.TestStorage')
     def test_command_output(self):
+        """
+        Test loadimage command.
+        """
         out = StringIO()
-        call_command('loadimage', stdout=out)
+
+        # Create test directory.
+        test_dir = os.path.join(default_storage.location, 'test')
+        makedirs(test_dir)
+
+        # Run command with empty direction of images.
+        call_command('loadimage', path='test', stdout=out)
+
+        # Stdout write: 'Media direction is empty'.
         self.assertIn('Media direction is empty', out.getvalue())
 
-        default_storage.save(test_image())
-        
-        call_command('loadimage', stdout=out)
-        person = Person.objects.get(image=PHOTO_FILE)
-        self.assertEqual(person.image.name, PHOTO_FILE)
+        # Load image file.
+        default_storage.save('test/test.jpg', test_image())
+
+        # Run command with one image in direction.
+        call_command('loadimage', path='test', stdout=out)
+
+        # Delete image file and test directory.
+        default_storage.delete('test/test.jpg')
+        shutil.rmtree(test_dir)
+        # Check that file load to database.
+        person = Person.objects.get(name='test')
+        self.assertEqual(person.image.name, 'uploads/test.jpg')

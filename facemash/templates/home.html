@@ -14,43 +14,31 @@
         <h3 class="text-muted">{% trans 'Facemash' %} <small>({% trans 'clone' %})</small></h3>
       </div>
 </div>
+ {% if two_random_person %}
 <div class="jumbotron">
     <h3>Who's hotter? Click to choose!</h3>
     <div class="row">
+      {% for person in two_random_person %}
       <div class="col-xs-6 col-md-6">
         <a href="#" class="thumbnail">
-          <img src="..." alt="...">
+          <img src="{{ person.image.url }}" alt="{{ person.name }}">
         </a>
-        fdsd
-      </div>    
-      <div class="col-xs-6 col-md-6">
-        <a href="#" class="thumbnail">
-          <img src="..." alt="...">
-        </a>
-        sdsd  
+        <p>{{ person.name }}</p>
       </div>
+      {% endfor %}
     </div>
 </div>
 <div class="row">
+  {% for top in top_person %}
   <div class="col-xs-6 col-md-3">
     <a href="#" class="thumbnail">
-      <img src="..." alt="...">
+      <img src="{{ top.image.url }}" alt="{{ top.name }}">
     </a>
+     <p>{{ top.name }}</p>
   </div>
-  <div class="col-xs-6 col-md-3">
-    <a href="#" class="thumbnail">
-      <img src="..." alt="...">
-    </a>
-  </div>
-  <div class="col-xs-6 col-md-3">
-    <a href="#" class="thumbnail">
-      <img src="..." alt="...">
-    </a>
-  </div>
-  <div class="col-xs-6 col-md-3">
-    <a href="#" class="thumbnail">
-      <img src="..." alt="...">
-    </a>
-  </div>
+  {% endfor %}
 </div>
+{% else %}
+<p>{% trans 'Person db is empty yet!' %}</p>
+{% endif %}
 {% endblock content %}

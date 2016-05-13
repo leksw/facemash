@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import random
 from io import BytesIO
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from PIL import Image
@@ -32,10 +32,13 @@ def test_image():
 
 
 class PersonModelTest(TestCase):
+    @override_settings(DEFAULT_FILE_STORAGE='facemash.storage.TestStorage')
     def setUp(self):
         random.seed(1)
-        self.person_one = Person(name='Aruny', image=test_image())
-        self.person_two = Person(name='Vika', image=test_image())
+        self.person_one = Person.objects.create(
+            name='Aruny', image=test_image())
+        self.person_two = Person.objects.create(
+            name='Vika', image=test_image())
 
     def test_person_default_fields(self):
         """
@@ -46,10 +49,11 @@ class PersonModelTest(TestCase):
         all_person = Person.objects.all()
 
         # check that its field 'k' is 24.
+        self.assertEqual(len(all_person), 2)
         self.assertEqual(int(all_person[0].k), 24)
-        self.assertEqual(int(all_person[0].ratio), 0)
+        self.assertEqual(int(all_person[0].rate), 0)
         self.assertEqual(int(all_person[1].k), 24)
-        self.assertEqual(int(all_person[1].ratio), 0)
+        self.assertEqual(int(all_person[1].rate), 0)
 
     def test_person_score_method(self):
         """
@@ -66,4 +70,5 @@ class PersonModelTest(TestCase):
         # Check that ratio is 24:
         #  expected_p1 = 1/(1+10**((ratio_p2-ratio_p1)/400))
         #  new_ratio_p1 = ratio_p1 + p1.k*(1-expected_p1)
-        self.assertEqual(int(person_win.ratio), 12)
+        self.assertEqual(self.person_one.k, 24)
+        self.assertEqual(person_win.rate, 12.0)
