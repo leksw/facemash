@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^top/$', views.top, name='top'),
     url(r'^score/$', views.score, name='score'),
-    url(r'^home_request/$', views.home_request, name='home-request'),
+    url(r'^home_request/$', views.home_ajax, name='home-ajax'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

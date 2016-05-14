@@ -18,7 +18,7 @@ PHOTO_FILE = 'photo.jpg'
 
 def test_image():
     """
-    Created test image file
+    Created test image file.
     """
     im = Image.new(mode='RGB', size=(200, 200))  # create a new image using PIL
     im_io = BytesIO()  # a StringIO object for saving image
@@ -44,43 +44,42 @@ class HomePageTest(TestCase):
     def test_home_page_template(self):
         response = self.client.get(reverse('home'))
 
-        # check template and content text
+        # Check template and content text.
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
         self.assertIn(b"Who's hotter? Click to choose!", response.content)
-        self.assertIn(b"Aruny", response.content)
-        self.assertIn(b"Vika", response.content)
 
     @override_settings(DEFAULT_FILE_STORAGE='facemash.storage.TestStorage')
     def test_home_page_three_person_in_db(self):
         """
-        Make sure that home page views only two person.
+        Make sure that home_ajax view return only two person.
         """
-        # add three person
+        # Add three person.
         self.person_three = Person.objects.create(
             name='Dasha', image=test_image())
 
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home-ajax'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        # check template and content text
-        self.assertTemplateUsed(response, 'home.html')
+        # Check content data.
         self.assertIn(b"Aruny", response.content)
         self.assertIn(b"Vika", response.content)
 
     @override_settings(DEFAULT_FILE_STORAGE='facemash.storage.TestStorage')
     def test_home_page_four_or_more_person_in_db(self):
         """
-        Make sure that home page views only four person.
+        Make sure that home_ajax view return only four person.
         """
-        # add four and five person
+        # Add four and five person.
         self.person_four = Person.objects.create(
             name='Lena', image=test_image())
         self.person_five = Person.objects.create(
             name='Katy', image=test_image())
 
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home-ajax'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        # check template and content text
-        self.assertTemplateUsed(response, 'home.html')
+        # Check content data.
         self.assertIn(b"Aruny", response.content)
         self.assertIn(b"Vika", response.content)
         self.assertNotIn(b"Dahsa", response.content)
@@ -89,30 +88,30 @@ class HomePageTest(TestCase):
 
     def test_home_page_one_person_in_db(self):
         """
-        Make sure that home page views "Need two persons at least."
-        when person db is empty.
+        Make sure that home_ajax view return two = []
+        when one person is in db.
         """
-        # delete one person
+        # Delete one person.
         person = Person.objects.first()
         person.delete()
 
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home-ajax'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        # check template and content text
-        self.assertTemplateUsed(response, 'home.html')
-        self.assertIn(b"Person db is empty yet!", response.content)
+        # Check content data.
+        self.assertIn(b'"two": "[]"', response.content)
 
     def test_home_page_empty_person_db(self):
         """
-        Make sure that home page views "Person db is empty yet!"
+        Make sure that home_ajax view return two = []
         when person db is empty.
         """
-        # delete all persons
+        # Delete all persons.
         person = Person.objects.all()
         person.delete()
 
-        response = self.client.get(reverse('home'))
+        response = self.client.get(reverse('home-ajax'),
+                                   HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
-        # check template and content text
-        self.assertTemplateUsed(response, 'home.html')
-        self.assertIn(b"Person db is empty yet!", response.content)
+        # Check content data.
+        self.assertIn(b'"two": "[]"', response.content)

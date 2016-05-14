@@ -11,6 +11,9 @@ start_db:
 stop_db:
 	sudo service postgresql stop
 
+restart_db:
+	sudo service postgresql restart
+
 run:
 	PYTHONPATH=$(PYTHONPATH) $(manage) runserver $(IP):$(PORT)
 

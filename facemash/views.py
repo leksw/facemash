@@ -19,16 +19,15 @@ def top(request):
     return render(request, 'top.html', context)
 
 
-def home_request(request):
+def home_ajax(request):
     if request.is_ajax():
-        if request.method == 'POST':
-            two_random_person = Person.objects.two_random()
-            top_person = Person.objects.order_by('-rate')[:4]
+        two_random_person = Person.objects.two_random()
+        top_person = Person.objects.order_by('-rate')[:4]
 
-            two_random = serializers.serialize("json", two_random_person)
-            top = serializers.serialize("json", top_person)
+        two_random = serializers.serialize("json", two_random_person)
+        top = serializers.serialize("json", top_person)
 
-            return JsonResponse({'two': two_random, 'top': top}, safe=False)
+        return JsonResponse({'two': two_random, 'top': top}, safe=False)
 
     return HttpResponseBadRequest('Error request')
 

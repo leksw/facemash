@@ -9,7 +9,7 @@
         <p class="thumbnail">
           <img src="{{ top.image.url }}" alt="{{ top.name }}">
         </p>
-         <p>{{ top.name }} - {{ top.rate }}</p>
+         <p>{{ top.name }}, {% trans 'score' %}: {{ top.rate|floatformat:-2 }}</p>
       </div>
       {% endfor %}
     </div>
