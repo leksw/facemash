@@ -56,3 +56,7 @@ p {
 .thumbnail {
       margin-bottom: 5px;
 }
+
+.footer ul li {
+  display: inline;
+}

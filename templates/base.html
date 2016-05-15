@@ -6,7 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>{% block title %}{% trans 'FaMa' %}{% endblock %}</title>
+    
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <title>{% block title %}{% trans 'FM' %}{% endblock %}</title>
     
     <!-- Bootstrap -->
     <link rel="stylesheet" type="text/css" href="{% static 'bower_components/bootstrap/dist/css/bootstrap.min.css' %}" />
@@ -26,7 +28,7 @@
        
         <hr>
         <footer>
-           <p>&copy; Company 2016</p>
+           <p>&copy; 2016 &nbsp; Aleksey Woronow &nbsp;|&nbsp; Powered by <a href="http://djangoproject.com/">Django 1.9.6</a></p>
         </footer>
     </div> <!-- /container -->
 

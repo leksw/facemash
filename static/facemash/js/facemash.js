@@ -17,7 +17,7 @@ var homeRequest = (function($){
     function handleRequest(data) {
         var two = [],
         top = [];
-        
+        console.log(data.two);
         $.each(JSON.parse(data.two), function(i, val){
            two.push(
                '<div id="' + val.pk + '" class="col-xs-6 col-md-6">'
@@ -48,7 +48,6 @@ var homeRequest = (function($){
             $.ajax({
                 url: '/home_request/',
                 dataType : "json",
-                beforeSend: beforeSendHandler,
                 success: function(data, textStatus) {
                     handleRequest(data);
                 },
@@ -62,8 +61,9 @@ var homeRequest = (function($){
  
 
 $(document).ready(function(){
+    console.log($.cookie('csrftoken'));
     homeRequest.loadRequest();
-    setInterval(homeRequest.loadRequest, 5000);
+    //setInterval(homeRequest.loadRequest, 5000);
     $('#score').on('click', '.thumbnail', function(){
         var win = $(this).parent(),
         data = {win_id: win.attr('id'), loser_id: win.siblings().attr('id')};
