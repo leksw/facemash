@@ -27,6 +27,15 @@ h2 {
   text-align: center;
 }
 
+.jumbotron {
+  background-color: #fff;
+}
+
+.top {
+  background-color: #eee; 
+  padding: 5px;
+}
+
 .jumbotron p {
   margin-bottom: 1px;
   font-size: 19px;

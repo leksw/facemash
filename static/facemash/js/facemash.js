@@ -63,7 +63,7 @@ var homeRequest = (function($){
 
 $(document).ready(function(){
     homeRequest.loadRequest();
-    //setInterval(homeRequest.loadRequest, 5000);
+    setInterval(homeRequest.loadRequest, 5000);
     $('#score').on('click', '.thumbnail', function(){
         var win = $(this).parent(),
         data = {win_id: win.attr('id'), loser_id: win.siblings().attr('id')};

@@ -133,6 +133,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'files', 'media')
 
+# Folder for load images in MEDIA_URL directory.
+IMG_DIR = 'images'
 
 try:
     from .local_settings import *
