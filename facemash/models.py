@@ -7,6 +7,8 @@ import os
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
+from sorl.thumbnail.shortcuts import get_thumbnail
+
 
 class RandomQuerySet(models.QuerySet):
     def two_random(self):
@@ -46,3 +48,14 @@ class Person(models.Model):
         if not self.name:
             self.name = os.path.splitext(os.path.split(self.image.path)[-1])[0]
         super(Person, self).save(*args, **kwargs)
+
+    def get_thumbnail(self, size):
+        img = self.image
+        return get_thumbnail(img, '%(size)ix%(size)i' % {'size': size}).url
+
+    def get_thumbnail_300(self):
+        return self.get_thumbnail(300)
+
+    def get_thumbnail_75(self):
+        return self.get_thumbnail(75)
+

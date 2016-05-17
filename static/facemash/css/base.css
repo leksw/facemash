@@ -55,6 +55,8 @@ p {
 
 .thumbnail {
       margin-bottom: 5px;
+      border: 0;
+      background-color: inherit;
 }
 
 .footer ul li {

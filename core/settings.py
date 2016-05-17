@@ -40,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
 
-    'facemash',
+    'sorl.thumbnail',
 
+    'facemash',
 ]
 
 MIDDLEWARE_CLASSES = [

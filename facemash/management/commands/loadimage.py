@@ -29,8 +29,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         path = options['folder']
-        self.stdout.write(
-                self.style.ERROR(path))
+
         # Check whether the folder.
         try:
             image_dir = os.listdir(path)

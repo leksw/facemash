@@ -17,28 +17,36 @@ var homeRequest = (function($){
     function handleRequest(data) {
         var two = [],
         top = [];
-        console.log(data.two);
-        $.each(JSON.parse(data.two), function(i, val){
+
+        $.each(data.two, function(i, val){
            two.push(
-               '<div id="' + val.pk + '" class="col-xs-6 col-md-6">'
+               '<div id="' + val.id + '" class="col-xs-6 col-md-6">'
                + '<a href = "javascript:void(0);" class="thumbnail">'
-               + '<img src="/media/' + val.fields.image + '" alt="' 
-               + val.fields.name + '"></a><p>' + val.fields.name + '</p>'
-               + '<p>score:&nbsp;' + (val.fields.rate).toFixed(2) + '</p></div>'
+               + '<img src="' + val.thumbnail + '" alt="' 
+               + val.name + '"></a><p>' + val.name + '</p>'
+               + '<p>score:&nbsp;' + (val.rate).toFixed(2) + '</p></div>'
            ); 
         });
-        $.each(JSON.parse(data.top), function(i, val){
-           top.push(
-               '<div id="' + val.pk + '" class="col-xs-6 col-md-3">'
-               + '<p class="thumbnail"><img src="/media/' + val.fields.image +
-               '" alt="' + val.fields.name + '"></p><p>' + val.fields.name + '</p>'
-               + '<p>score:&nbsp;' + (val.fields.rate).toFixed(2) + '</p></div>'
+       
+        $.each(data.top, function(i, val){
+            var sliced = val.name.slice(0,10);
+            if (sliced.length < val.name.length) {
+               sliced += '...';
+            };       
+            top.push(
+               '<div id="' + val.id + '" class="col-xs-6 col-md-3">'
+               + '<p class="thumbnail"><img src="' + val.thumbnail +
+               '" alt="' + val.name + '"></p><p class="sliced" title="' + val.name + '">' + sliced + '</p>'
+               + '<p>score:&nbsp;' + (val.rate).toFixed(2) + '</p></div>'
            ); 
         });
 
         if (two.length != 0){
             $('#score').html(two);
             $('#top').html(top);
+            $( ".sliced" ).mouseover(function() {
+                $( "#log" ).append( "<div>Handler for .mouseover() called.</div>" );
+            });
         } else {
             $('#score').html('<p>Person database is empty yet!</p>');
         }
@@ -61,7 +69,6 @@ var homeRequest = (function($){
  
 
 $(document).ready(function(){
-    console.log($.cookie('csrftoken'));
     homeRequest.loadRequest();
     //setInterval(homeRequest.loadRequest, 5000);
     $('#score').on('click', '.thumbnail', function(){
