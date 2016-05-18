@@ -1,9 +1,9 @@
 "use strict";
 
+$ = $ || django.jQuery;
+
 var maxImageWidth = 2800,
     maxImageHeight = 2800;
-
-
 
 $(document).ready(function(){
 
@@ -19,10 +19,8 @@ $(document).ready(function(){
 
         init: function() {
             var uploadDropzone = this,
-            submitButton = document.querySelector("[type=submit]"),
-            buttonButton = $("[type=button]");
-            
-  
+            submitButton = $('#button-upload');
+
             // Register for the thumbnail callback.
             // When the thumbnail is created the image dimensions are set.
             this.on("thumbnail", function(file) {
@@ -40,8 +38,10 @@ $(document).ready(function(){
             });
 
             this.on("success", function(file, responseText) {
-                homeRequest.loadRequest();
-                console.log(responseText.msg);
+                if (!!document.homeRequest) {
+                    homeRequest.loadRequest();
+                }
+                console.log(responseText.success);
             });
             
             this.on("sendingmultiple", function(file, xhr, formData) {
@@ -49,14 +49,11 @@ $(document).ready(function(){
                 formData.append("quantity", file.length);
             });
 
-            submitButton.addEventListener('click', function(e) {
+            submitButton.on('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 uploadDropzone.processQueue();
             });
-            buttonButton.addEventListener('click', function(e) {
-                uploadDropzone.removeAllFiles();
-            });  
         },
       
         // Instead of directly accepting / rejecting the file, setup two

@@ -1,0 +1,23 @@
+{% load i18n %}
+<!-- Modal -->
+<div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">{% trans 'Upload Images' %}</h4>
+      </div>
+      <div class="modal-body">
+         <form action="{% url 'upload-images' %}" class="dropzone" id="upload-dropzone" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="class btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+        <button type="submit" class="btn btn-primary" id="button-upload">{% trans 'Upload' %}</button>
+      </div>
+    </div>
+  </div>
+</div>

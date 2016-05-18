@@ -12,6 +12,7 @@ from facemash import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^about/$', flatviews.flatpage, {'url': '/about/'}, name='about'),
+    url(r'^contact/$', flatviews.flatpage, {'url': '/contact/'}, name='contact'),
 
     url(r'^$', views.home, name='home'),
     url(r'^top/$', views.top, name='top'),

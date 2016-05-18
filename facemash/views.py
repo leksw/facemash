@@ -42,7 +42,7 @@ def home_ajax(request):
         return JsonResponse({'two': thumbl_persons, 'top': thumbl_top})
 
     return HttpResponseBadRequest(
-        content=json.dumps({"errors": "Person could not be returned." }),
+        content=json.dumps({"errors": "Person could not be returned."}),
         content_type="application/json")
 
 
@@ -60,7 +60,7 @@ def score(request):
             return JsonResponse({win_id: rate})
 
     return HttpResponseBadRequest(
-        content=json.dumps({"errors": "Person is not be scored." }),
+        content=json.dumps({'errors': 'Person is not be scored.'}),
         content_type="application/json")
 
 
@@ -74,5 +74,5 @@ def upload_image(request):
         return JsonResponse({'success': 'Files are loaded.'})
 
     return HttpResponseBadRequest(
-        content=json.dumps({"errors": "File could not be saved." }),
+        content=json.dumps({'errors': 'Person is not be scored.'}),
         content_type="application/json")
