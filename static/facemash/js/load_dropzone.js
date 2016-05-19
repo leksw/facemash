@@ -54,6 +54,10 @@ $(document).ready(function(){
                 e.stopPropagation();
                 uploadDropzone.processQueue();
             });
+            
+            $('#loadModal').on('hidden.bs.modal', function () {
+                 uploadDropzone.removeAllFiles();
+            });
         },
       
         // Instead of directly accepting / rejecting the file, setup two

@@ -6,7 +6,6 @@ import json
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
-from django.core import serializers
 
 from .models import Person
 
@@ -23,23 +22,11 @@ def top(request):
 
 def home_ajax(request):
     if request.is_ajax():
-        two_random_person = Person.objects.two_random()
-        thumbl_persons = []
-        for person in enumerate(two_random_person.values()):
-            person[1].update(
-                {'thumbnail': two_random_person[person[0]].get_thumbnail_300()})
-            thumbl_persons.append(person[1])
+        two_random_thumbnail = Person.objects.two_random_with_thumbnail(300)
+        top_thumbnail = Person.objects.all_with_thumbnail('-rate', 4, 75)
 
-        top_person = Person.objects.order_by('-rate')[:4]
-        thumbl_top = []
-        for top in enumerate(top_person.values()):
-            top[1].update(
-                {'thumbnail': top_person[top[0]].get_thumbnail_75()})
-            thumbl_top.append(top[1])
-        # two_random = serializers.serialize("json", two_random_person)
-        # top = serializers.serialize("json", top_person)
-
-        return JsonResponse({'two': thumbl_persons, 'top': thumbl_top})
+        return JsonResponse(
+            {'two': two_random_thumbnail, 'top': top_thumbnail})
 
     return HttpResponseBadRequest(
         content=json.dumps({"errors": "Person could not be returned."}),

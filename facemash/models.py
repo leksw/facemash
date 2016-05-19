@@ -20,6 +20,30 @@ class RandomQuerySet(models.QuerySet):
         second_id = random.choice(list_id_without_first_id)
         return self.filter(id__in=[first_id, second_id])
 
+    def two_random_with_thumbnail(self, size):
+        if not self.two_random():
+            return []
+
+        first, second = self.two_random().values()
+
+        first.update(
+            {'thumbnail': self.get(id=first['id']).get_thumbnail(size)})
+        second.update(
+            {'thumbnail': self.get(id=second['id']).get_thumbnail(size)})
+
+        return [first, second]
+
+    def all_with_thumbnail(self, order, quantity, size):
+        all_person = self.order_by(order)[:quantity].values()
+        person_with_thumbnail = []
+
+        for person in all_person:
+            person.update(
+                {'thumbnail': self.get(id=person['id']).get_thumbnail(size)})
+            person_with_thumbnail.append(person)
+
+        return person_with_thumbnail
+
 
 @python_2_unicode_compatible
 class Person(models.Model):
@@ -58,4 +82,3 @@ class Person(models.Model):
 
     def get_thumbnail_75(self):
         return self.get_thumbnail(75)
-

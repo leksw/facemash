@@ -99,7 +99,7 @@ class HomePageTest(TestCase):
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         # Check content data.
-        self.assertIn(b'"two": "[]"', response.content)
+        self.assertIn(b'"two": []', response.content)
 
     def test_home_page_empty_person_db(self):
         """
@@ -114,4 +114,4 @@ class HomePageTest(TestCase):
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         # Check content data.
-        self.assertIn(b'"two": "[]"', response.content)
+        self.assertIn(b'"two": []', response.content)
