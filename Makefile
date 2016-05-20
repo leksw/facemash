@@ -14,6 +14,9 @@ stop_db:
 restart_db:
 	sudo service postgresql restart
 
+start_redis:
+	sudo service redis-server start
+
 run:
 	PYTHONPATH=$(PYTHONPATH) $(manage) runserver $(IP):$(PORT)
 

@@ -1,4 +1,8 @@
 Django==1.9.6
 psycopg2==2.6.1
 Pillow==3.2.0
-sorl-thumbnail==12.3
+sorl-thumbnail==12.4a1
+redis==2.10.5
+django-redis-cache==1.6.5
+celery==3.1.23
+django-celery==3.1.17

@@ -35,8 +35,8 @@ class RandomQuerySet(models.QuerySet):
 
     def all_with_thumbnail(self, order, quantity, size):
         all_person = self.order_by(order)[:quantity].values()
-        person_with_thumbnail = []
 
+        person_with_thumbnail = []
         for person in all_person:
             person.update(
                 {'thumbnail': self.get(id=person['id']).get_thumbnail(size)})
@@ -63,7 +63,8 @@ class Person(models.Model):
         """
         if not isinstance(competitor, Person) or self.id == competitor.id:
             raise ValueError
-        expected_rate = 1/(1+10**((competitor.rate-self.rate)/400))
+
+        expected_rate = 1/float(1+10**((competitor.rate-self.rate)/400))
         self.rate = self.rate + self.k*(1-expected_rate)
         self.save()
         return self.rate

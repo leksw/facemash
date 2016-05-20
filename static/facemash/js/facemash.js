@@ -82,11 +82,10 @@ $(document).ready(function(){
             data: data,
             beforeSend: beforeSendHandler,
             success: function(data) {
-                console.log(data);
                 homeRequest.loadRequest();
             },
             error: function (jqXHR, textStatus, errorThrown){
-                console.log(jqXHR);
+                console.log(jqXHR.responseText);
             }
         });
         

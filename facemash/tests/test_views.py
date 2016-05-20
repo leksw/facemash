@@ -7,6 +7,7 @@ from io import BytesIO
 from django.test import TestCase, override_settings
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.cache import cache
 
 from PIL import Image
 
@@ -40,6 +41,9 @@ class HomePageTest(TestCase):
             name='Aruny', image=test_image())
         self.person_two = Person.objects.create(
             name='Vika', image=test_image())
+
+        # Clear cache.
+        cache.clear()
 
     def test_home_page_template(self):
         response = self.client.get(reverse('home'))

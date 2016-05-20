@@ -4,9 +4,11 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             <li role="presentation"><a href="{% url 'top' %}">{% trans 'Top 10' %}</a></li>
+            {% if user.is_authenticated %}
             <li role="presentation">
                <a href="#" data-toggle="modal" data-target="#loadModal">{% trans 'Upload images' %}</a>
             </li>
+            {% endif %}
             <li role="presentation"><a href="{% url 'about' %}">{% trans 'About' %}</a></li>
             <li role="presentation"><a href="{% url 'contact' %}">{% trans 'Contact' %}</a></li>
           </ul>

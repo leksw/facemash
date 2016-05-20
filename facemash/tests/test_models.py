@@ -60,6 +60,9 @@ class PersonModelTest(TestCase):
         Test method score that take other instance of Person (unselected),
         and calculate new ratio person.
         """
+        self.assertEqual(self.person_one.rate, 0)
+        self.assertEqual(self.person_two.rate, 0)
+        self.assertEqual(self.person_one.k, 24)
 
         # Applay score method person_one.
         self.person_one.score(self.person_two)
@@ -70,5 +73,6 @@ class PersonModelTest(TestCase):
         # Check that ratio is 24:
         #  expected_p1 = 1/(1+10**((ratio_p2-ratio_p1)/400))
         #  new_ratio_p1 = ratio_p1 + p1.k*(1-expected_p1)
+
         self.assertEqual(self.person_one.k, 24)
         self.assertEqual(person_win.rate, 12.0)

@@ -26,7 +26,8 @@ def home_ajax(request):
         top_thumbnail = Person.objects.all_with_thumbnail('-rate', 4, 75)
 
         return JsonResponse(
-            {'two': two_random_thumbnail, 'top': top_thumbnail})
+            {'two': two_random_thumbnail,
+             'top': top_thumbnail})
 
     return HttpResponseBadRequest(
         content=json.dumps({"errors": "Person could not be returned."}),

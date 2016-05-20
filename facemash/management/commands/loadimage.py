@@ -11,6 +11,12 @@ from django.conf import settings
 from facemash.models import Person
 
 
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
+
 images_dir = os.path.join(
     settings.MEDIA_ROOT, getattr(settings, 'IMG_DIR', 'images'))
 
