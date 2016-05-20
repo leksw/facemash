@@ -1,0 +1,24 @@
+{
+  "name": "facemash",
+  "homepage": "https://github.com/leksw/facemash",
+  "authors": [
+    "Алексей <aleks.woronow@yandex.ru>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "bootstrap": "^3.3.6",
+    "dropzone": "^4.3.0",
+    "jquery.cookie": "^1.4.1"
+  }
+}

@@ -1,7 +1,5 @@
 # _*_ coding: utf-8 _*_
-from __future__ import unicode_literals
-
-from __future__ import absolute_import
+from __future__ import unicode_literals, absolute_import
 
 import os
 
@@ -18,6 +16,7 @@ app = Celery('core')
 # pickle the object when using Windows.
 app.config_from_object('django.conf:settings')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
 
 @app.task(bind=True)
 def debug_task(self):

@@ -55,5 +55,4 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.ERROR('Directory is empty %s' % path))
         else:
-            self.stdout.write(
-                self.style.SUCCESS('Successfully loaded %s images' % count))
+            self.stdout.write('Successfully loaded %s images' % count)
