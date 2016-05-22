@@ -1,60 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from io import BytesIO
-import os
 import shutil
 
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.utils.six import StringIO
 from django.core.files.storage import FileSystemStorage
 
-from PIL import Image
-
 from facemash.models import Person
-
-
-PHOTO_FILE = 'photo.jpg'
-
-
-def makedirs(path):
-    try:
-        os.makedirs(path)
-    except OSError as e:
-        if e.errno == 17:
-            # Dir already exists. No biggie.
-            pass
-
-
-def test_image():
-    """
-    Created test image file
-    """
-    im = Image.new(mode='RGB', size=(200, 200))  # create a new image using PIL
-    im_io = BytesIO()  # a StringIO object for saving image
-    im.save(im_io, 'JPEG')  # save the image to im_io
-    im_io.seek(0)  # seek to the beginning
-
-    image = InMemoryUploadedFile(
-        im_io, None, PHOTO_FILE, 'image/jpeg', im_io.getvalue(), None
-    )
-
-    return image
-
-
-def test_text_file():
-    """
-    Create text file.
-    """
-    io = BytesIO()
-    io.write(b'test')
-    text_file = InMemoryUploadedFile(
-        io, None, 'test.txt', 'text', 'utf-8', None)
-    text_file.seek(0)
-
-    return text_file
+from .utils_test import test_image, test_file, makedirs
 
 
 class LoadimageTest(TestCase):
@@ -66,6 +21,7 @@ class LoadimageTest(TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
+        Person.objects.all().delete()
 
     @override_settings(DEFAULT_FILE_STORAGE='facemash.storage.TestStorage')
     def test_command_output_pick_folder(self):
@@ -82,7 +38,7 @@ class LoadimageTest(TestCase):
             'Directory is empty %s' % self.test_dir,  out.getvalue())
 
         # Create image file.
-        self.test_fs.save('test.jpg', test_image())
+        self.test_fs.save('test.jpg', test_image('test.jpg'))
 
         # Run command with one image in direction.
         call_command('loadimage', folder=self.test_dir, stdout=out)
@@ -109,8 +65,8 @@ class LoadimageTest(TestCase):
             'Directory is empty %s' % self.test_dir,  out.getvalue())
 
         # Create image files.
-        self.test_fs.save('test_text.txt', test_text_file())
-        self.test_fs.save('test.jpg', test_image())
+        self.test_fs.save('test_text.txt', test_file('text.txt'))
+        self.test_fs.save('test.jpg', test_image('test.jpg'))
 
         # Run command with one image in direction.
         call_command('loadimage', folder=self.test_dir, stdout=out)
@@ -139,7 +95,7 @@ class LoadimageTest(TestCase):
             'Directory is empty %s' % self.test_dir,  out.getvalue())
 
         # Create image file.
-        self.test_fs.save('test_text.jpg', test_text_file())
+        self.test_fs.save('test_text.jpg', test_file('text.txt'))
 
         # Run command with one image in direction.
         call_command('loadimage', folder=self.test_dir, stdout=out)

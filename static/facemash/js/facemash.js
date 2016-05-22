@@ -19,17 +19,23 @@ var homeRequest = (function($){
         top = [];
 
         $.each(data.two, function(i, val){
+           var win = isNaN(val.win) ? 0 : val.win,
+           lose = isNaN(val.lose) ? 0 : val.lose;
+           console.log(win+lose);
            two.push(
                '<div id="' + val.id + '" class="col-xs-6 col-md-6">'
                + '<a href = "javascript:void(0);" class="thumbnail">'
                + '<img src="' + val.thumbnail + '" alt="' 
                + val.name + '"></a><p>' + val.name + '</p>'
-               + '<p>score:&nbsp;' + (val.rate).toFixed(2) + '</p></div>'
+               + '<p>score:&nbsp;' + (val.rate).toFixed(2) + '</p>'
+               + '<p>votes:&nbsp;' + (win+lose).toFixed(0) + '</p></div>'
            ); 
         });
        
         $.each(data.top, function(i, val){
-            var sliced = val.name.slice(0,10);
+            var win = isNaN(val.win) ? 0 : val.win,
+            lose = isNaN(val.lose) ? 0 : val.lose,
+            sliced = val.name.slice(0,10);
             if (sliced.length < val.name.length) {
                sliced += '...';
             };       
@@ -37,7 +43,8 @@ var homeRequest = (function($){
                '<div id="' + val.id + '" class="col-xs-6 col-md-3">'
                + '<p class="thumbnail"><img src="' + val.thumbnail +
                '" alt="' + val.name + '"></p><p class="sliced" title="' + val.name + '">' + sliced + '</p>'
-               + '<p>score:&nbsp;' + (val.rate).toFixed(2) + '</p></div>'
+               + '<p>score:&nbsp;' + (val.rate).toFixed(2) + '</p>'
+               + '<p>votes:&nbsp;' + (win+lose).toFixed(0) + '</p></div>'
            ); 
         });
 

@@ -8,11 +8,9 @@ from django.http import JsonResponse
 from django.http import HttpResponseBadRequest
 
 from .models import Person
-from .tasks import test
 
 
 def home(request):
-    test.delay()
     return render(request, 'home.html')
 
 

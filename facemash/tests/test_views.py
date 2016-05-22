@@ -2,35 +2,13 @@
 from __future__ import unicode_literals
 
 import random
-from io import BytesIO
 
 from django.test import TestCase, override_settings
 from django.core.urlresolvers import reverse
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.cache import cache
 
-from PIL import Image
-
 from facemash.models import Person
-
-
-PHOTO_FILE = 'photo.jpg'
-
-
-def test_image():
-    """
-    Created test image file.
-    """
-    im = Image.new(mode='RGB', size=(200, 200))  # create a new image using PIL
-    im_io = BytesIO()  # a StringIO object for saving image
-    im.save(im_io, 'JPEG')  # save the image to im_io
-    im_io.seek(0)  # seek to the beginning
-
-    image = InMemoryUploadedFile(
-        im_io, None, PHOTO_FILE, 'image/jpeg', im_io.getvalue(), None
-    )
-
-    return image
+from .utils_test import test_image
 
 
 class HomePageTest(TestCase):
@@ -38,12 +16,15 @@ class HomePageTest(TestCase):
     def setUp(self):
         random.seed(1)
         self.person_one = Person.objects.create(
-            name='Aruny', image=test_image())
+            name='Aruny', image=test_image('aruny.jpg'))
         self.person_two = Person.objects.create(
-            name='Vika', image=test_image())
+            name='Vika', image=test_image('vika.jpg'))
 
         # Clear cache.
         cache.clear()
+
+    def tearDown(self):
+        Person.objects.all().delete()
 
     def test_home_page_template(self):
         response = self.client.get(reverse('home'))
@@ -60,7 +41,7 @@ class HomePageTest(TestCase):
         """
         # Add three person.
         self.person_three = Person.objects.create(
-            name='Dasha', image=test_image())
+            name='Dasha', image=test_image('dasha.jpg'))
 
         response = self.client.get(reverse('home-ajax'),
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -76,9 +57,9 @@ class HomePageTest(TestCase):
         """
         # Add four and five person.
         self.person_four = Person.objects.create(
-            name='Lena', image=test_image())
+            name='Lena', image=test_image('lena.jpg'))
         self.person_five = Person.objects.create(
-            name='Katy', image=test_image())
+            name='Katy', image=test_image('katy.jpg'))
 
         response = self.client.get(reverse('home-ajax'),
                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')

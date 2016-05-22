@@ -1,34 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import os
 import random
-from io import BytesIO
 
 from django.test import TestCase, override_settings
-from django.core.files.uploadedfile import InMemoryUploadedFile
-
-from PIL import Image
+from django.conf import settings
 
 from facemash.models import Person
-
-
-PHOTO_FILE = 'photo.jpg'
-
-
-def test_image():
-    """
-    Created test image file
-    """
-    im = Image.new(mode='RGB', size=(200, 200))  # create a new image using PIL
-    im_io = BytesIO()  # a StringIO object for saving image
-    im.save(im_io, 'JPEG')  # save the image to im_io
-    im_io.seek(0)  # seek to the beginning
-
-    image = InMemoryUploadedFile(
-        im_io, None, PHOTO_FILE, 'image/jpeg', im_io.getvalue(), None
-    )
-
-    return image
+from .utils_test import test_image
 
 
 class PersonModelTest(TestCase):
@@ -36,9 +16,12 @@ class PersonModelTest(TestCase):
     def setUp(self):
         random.seed(1)
         self.person_one = Person.objects.create(
-            name='Aruny', image=test_image())
+            name='Aruny', image=test_image('aruny.jpg'))
         self.person_two = Person.objects.create(
-            name='Vika', image=test_image())
+            name='Vika', image=test_image('vika.jpg'))
+
+    def tearDown(self):
+        Person.objects.all().delete()
 
     def test_person_default_fields(self):
         """
@@ -57,8 +40,9 @@ class PersonModelTest(TestCase):
 
     def test_person_score_method(self):
         """
-        Test method score that take other instance of Person (unselected),
-        and calculate new ratio person.
+        Test method score that takes other instance of Person (unselected),
+        and calculate new ratio person. Also it adds 1 to win person,
+        and 1 to lose other person.
         """
         self.assertEqual(self.person_one.rate, 0)
         self.assertEqual(self.person_two.rate, 0)
@@ -69,10 +53,49 @@ class PersonModelTest(TestCase):
 
         # Take person_one from db.
         person_win = Person.objects.get(id=self.person_one.id)
+        person_lose = Person.objects.get(id=self.person_two.id)
 
-        # Check that ratio is 24:
+        # Check that ratio is 12:
         #  expected_p1 = 1/(1+10**((ratio_p2-ratio_p1)/400))
-        #  new_ratio_p1 = ratio_p1 + p1.k*(1-expected_p1)
-
+        #  new_ratio_p1 = ratio_p1 + p1.k*(1-expected_p1).
         self.assertEqual(self.person_one.k, 24)
         self.assertEqual(person_win.rate, 12.0)
+
+        # Now win person is 1, and other person lose is 1.
+        self.assertEqual(person_win.win, 1)
+        self.assertEqual(person_win.lose, 0)
+        self.assertEqual(person_lose.lose, 1)
+        self.assertEqual(person_lose.win, 0)
+
+    def test_person_delete_image_file_when_delete_instance(self):
+        """
+        Test overrided delete Person method that delete image file,
+        when delete related Person instance.
+        """
+        del_person = Person.objects.get(name=self.person_two.name)
+        self.assertEqual(del_person.name, self.person_two.name)
+        del_image_path = del_person.image.name
+
+        # Delete test person.
+        del_person.delete()
+
+        # Now check that file 'vika.jpg' is not.
+        image_path = os.path.join(
+            settings.MEDIA_ROOT, del_image_path)
+        self.assertTrue(not os.path.isfile(image_path))
+
+    @override_settings(DEFAULT_FILE_STORAGE='facemash.storage.TestStorage')
+    def test_person_delete_image_file_when_change_image(self):
+        """
+        Test overrided save Person method that delete image file,
+        when change image.
+        """
+        change_person = Person.objects.get(name=self.person_one.name)
+        old_image_path = change_person.image.name
+        change_person.image = test_image('aruny_new.jpg')
+        change_person.save()
+
+        # Now check that file 'aruny.jpg' is not.
+        image_path = os.path.join(
+            settings.MEDIA_ROOT, old_image_path)
+        self.assertTrue(not os.path.isfile(image_path))
