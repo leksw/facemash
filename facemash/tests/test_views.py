@@ -6,9 +6,13 @@ import random
 from django.test import TestCase, override_settings
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
+from django.contrib.auth import get_user_model
 
 from facemash.models import Person
 from .utils_test import test_image
+
+
+User = get_user_model()
 
 
 class HomePageTest(TestCase):
@@ -19,6 +23,7 @@ class HomePageTest(TestCase):
             name='Aruny', image=test_image('aruny.jpg'))
         self.person_two = Person.objects.create(
             name='Vika', image=test_image('vika.jpg'))
+        self.user = User.objects.create_user(username='test', password='12345')
 
         # Clear cache.
         cache.clear()
@@ -100,3 +105,25 @@ class HomePageTest(TestCase):
 
         # Check content data.
         self.assertIn(b'"two": []', response.content)
+
+    def test_home_page_with_login_user(self):
+        """
+        Make shure that home page has 'Upload images' link when
+        user logging into the site.
+        """
+        response = self.client.get(reverse('home'))
+
+        # Home page don't has link 'Upload images'.
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertNotIn(b"Upload images", response.content)
+
+        # Logging into the site.
+        self.client.login(username=self.user.username, password='12345')
+
+        response = self.client.get(reverse('home'))
+
+        # Now page has link 'Upload images'.
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'home.html')
+        self.assertIn(b"Upload images", response.content)
