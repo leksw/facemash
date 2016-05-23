@@ -8,6 +8,7 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.db.models.query import EmptyQuerySet
 from django.db.models import F
+from django.utils.html import format_html
 
 from sorl.thumbnail.shortcuts import get_thumbnail
 
@@ -97,6 +98,10 @@ class Person(models.Model):
 
     def get_thumbnail_75(self):
         return self.get_thumbnail(75)
+
+    def admin_image(self):
+        return format_html(
+            '<p class="thumbnail"><img src="{}"></p>', self.get_thumbnail_75())
 
     def _remove_on_image_update(self):
         try:
