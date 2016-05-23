@@ -29,6 +29,7 @@ coverage_test:
 
 install:
 	pip install -r requirements/dev.txt
+	cd static/ && bower install
 
 migrate:
 	PYTHONPATH=$(PYTHONPATH) $(manage) migrate
