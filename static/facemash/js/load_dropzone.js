@@ -39,6 +39,7 @@ $(document).ready(function(){
 
             this.on("success", function(file, responseText) {
                 if (!!document.homeRequest) {
+                    location.reload(); 
                     homeRequest.loadRequest();
                 }
                 console.log(responseText.success);

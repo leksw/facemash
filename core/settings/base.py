@@ -13,23 +13,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 
 
-# Celery settings
-
-BROKER_URL = 'redis://127.0.0.1/1'
-
-#: Only add pickle to this list if your broker is secured
-#: from unwanted access (see userguide/security.html)
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
-CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-
-CELERY_TIMEZONE = 'UTC'
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 # Quick-start development settings - unsuitable for production
@@ -154,7 +140,7 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'files', 'media')
+
 
 # Folder for load images in MEDIA_URL directory.
 IMG_DIR = 'images'
@@ -164,10 +150,4 @@ LOGGING = {
     'disable_existing_loggers': False,
 }
 
-import djcelery
-djcelery.setup_loader()
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass

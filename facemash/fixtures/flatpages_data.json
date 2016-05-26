@@ -1,0 +1,40 @@
+[
+{
+    "pk": 1,
+    "model": "sites.site",
+    "fields": {
+        "domain": "mashface-leksw.c9users.io",
+        "name": "mashface-leksw.c9users.io"
+    }
+},
+{
+    "pk": 1,
+    "model": "flatpages.flatpage",
+    "fields": {
+        "url": "/about/",
+        "enable_comments": false,
+        "sites": [
+            1
+        ],
+        "content": "This is a image voting website in which visitors can vote on various topics about anything.",
+        "registration_required": false,
+        "template_name": "about.html",
+        "title": "About"
+    }
+},
+{
+    "pk": 2,
+    "model": "flatpages.flatpage",
+    "fields": {
+        "url": "/contact/",
+        "enable_comments": false,
+        "sites": [
+            1
+        ],
+        "content": "I am here to answer any questions you may have about Facemash (clone). Reach out to us <a href=\"mailto:aleks.woronow@yandex.ru\">Aleks</a> and we'll respond as soon as we can.",
+        "registration_required": false,
+        "template_name": "contact.html",
+        "title": "Contact Us"
+    }
+}
+]
