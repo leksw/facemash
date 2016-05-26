@@ -5,6 +5,6 @@ bower_components/
 tmp
 .DS_Store
 .idea
-local_settings.py
+testing.py
 htmlcov/
 .coverage
