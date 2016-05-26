@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
 
-    'djcelery',
     'sorl.thumbnail',
 
     'facemash',

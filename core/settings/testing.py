@@ -10,6 +10,8 @@ SECRET_KEY = '#%wy_d$j^%5j53@&lil@m6cvf#u9ui9y4hwgt!uz**3mm!fi(b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+INSTALLED_APPS += ['djcelery']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
