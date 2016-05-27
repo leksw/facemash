@@ -21,7 +21,7 @@ run:
 	PYTHONPATH=$(PYTHONPATH) $(manage) runserver $(IP):$(PORT)
 
 test:
-	$(flake8) --exclude=migrations,base.py,testing.py --max-complexity=8 $(APP_LIST)
+	$(flake8) --exclude=migrations,base.py,testing.py,prodaction.py --max-complexity=8 $(APP_LIST)
 	PYTHONPATH=$(PYTHONPATH) $(manage) test -v2
 
 coverage_test:

@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^score/$', views.score, name='score'),
     url(r'^home_request/$', views.home_ajax, name='home-ajax'),
     url(r'^upload_images/$', views.upload_image, name='upload-images'),
-] 
+]
 
 if settings.DEBUG:
     urlpatterns += static(
