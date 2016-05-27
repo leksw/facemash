@@ -21,7 +21,7 @@ DATABASES = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'BINARY': True
+        'LOCATION': '/tmp/memcached.sock',
     }
 }
 
@@ -30,6 +30,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'files', 'media')
 
 
-os.environ['MEMCACHE_SERVERS'] = 'pub-memcache-10305.us-east-1-2.4.ec2.garantiadata.com:10305' 
-os.environ['MEMCACHE_USERNAME'] = 'aleks'
-os.environ['MEMCACHE_PASSWORD'] = 'hjlbjy12'
+# os.environ['MEMCACHE_SERVERS'] = 'pub-memcache-10305.us-east-1-2.4.ec2.garantiadata.com:10305' 
+# os.environ['MEMCACHE_USERNAME'] = 'aleks'
+# os.environ['MEMCACHE_PASSWORD'] = 'hjlbjy12'
