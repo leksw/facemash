@@ -4,6 +4,9 @@ from __future__ import unicode_literals
 from .base import *
 
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '#%wy_d$j^%5j53@&lil@m6cvf#u9ui9y4hwgt!uz**3mm!fi(b'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

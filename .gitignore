@@ -6,3 +6,5 @@ tmp
 .idea
 htmlcov/
 .coverages
+facemash_data.json
+flatpages_data.json
