@@ -28,8 +28,8 @@ coverage_test:
 	@coverage run --source=. manage.py test -v2 $(APP_LIST)
 
 install:
-	pip install -r requirements/dev.txt
-	cd static/ && bower install
+	pip install -r requirements/exampl.txt
+
 
 migrate:
 	PYTHONPATH=$(PYTHONPATH) $(manage) migrate
