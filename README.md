@@ -20,4 +20,5 @@ change SECRET_KEY in base.py to "my settings SECRET KEY" and DEBUG=True
 
 make migrate
 
-
+username: example
+password: example
