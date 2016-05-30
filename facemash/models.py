@@ -68,8 +68,14 @@ class Person(models.Model):
         """
         Take competitor and calculates a new rating person that is winer.
         """
-        if not isinstance(competitor, Person) or self.id == competitor.id:
-            raise ValueError
+        if not isinstance(competitor, Person):
+            raise ValueError(
+                'Argument of the score method is not a Person instant')
+
+        if self.id == competitor.id:
+            raise ValueError(
+                'Argument of the score method do not must be\
+                the instance that has the method')
 
         expected_rate = 1/float(1+10**((competitor.rate-self.rate)/400))
         self.rate = self.rate + self.k*(1-expected_rate)

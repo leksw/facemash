@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import random
+import json
 
 from django.test import TestCase, override_settings
 from django.core.urlresolvers import reverse
@@ -13,6 +14,15 @@ from .utils_test import test_image
 
 
 User = get_user_model()
+
+
+def create_persons(num):
+    rate = 0
+    for i in range(num):
+        name = 'test%s' % i
+        image = 'img%s.jpg' % i
+        rate += 1
+        Person.objects.create(name=name, image=image, rate=rate)
 
 
 class HomePageTest(TestCase):
@@ -127,3 +137,100 @@ class HomePageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
         self.assertIn(b"Upload images", response.content)
+
+    def test_top_page(self):
+        """
+        Make shure that top page views not more than 10 items,
+        and order by rate field.
+        """
+        # Create 10 person.
+        create_persons(10)
+
+        # Go to top page.
+        response = self.client.get(reverse('top'))
+
+        test9 = Person.objects.get(name='test9')
+        test0 = Person.objects.get(name='test0')
+        aruny = Person.objects.get(id=self.person_one.id)
+
+        # Now top page has only 10 created person.
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'top.html')
+
+        self.assertEqual(test9.rate, 10)
+        self.assertEqual(test0.rate, 1)
+        self.assertEqual(aruny.rate, 0)
+        self.assertIn(b"test9", response.content)
+        self.assertIn(b"test0", response.content)
+        self.assertNotIn(b"Aruny", response.content)
+        self.assertNotIn(b"Vika", response.content)
+
+    def test_home_ajax_not_ajax_request(self):
+        """
+        Make shure that home_ajax return error: "Person could not be returned,
+        if request isn't ajax.
+        """
+        # Send not ajax request.
+        response = self.client.post(reverse('home-ajax'))
+
+        self.assertEqual(
+            'Person could not be returned.',
+            json.loads(response.content.decode("utf-8"))['errors'])
+
+    def test_score_not_ajax_request(self):
+        """
+        Make shure that score return error: "Person is not be scored,
+        if request isn't ajax.
+        """
+        # Send not ajax request.
+        response = self.client.get(reverse('score'))
+
+        self.assertEqual(
+            'Person is not be scored.',
+            json.loads(response.content.decode("utf-8"))['errors'])
+
+    def test_upload_image_not_post_request(self):
+        """
+        Make shure that upload_image return error: "Image has not be uploaded,
+        if request isn't POST.
+        """
+        # Send not ajax request.
+        response = self.client.get(reverse('upload-images'))
+
+        self.assertEqual(
+            'Image has not be uploaded.',
+            json.loads(response.content.decode("utf-8"))['errors'])
+
+    def test_score_ajax_request(self):
+        """
+        Make shure that score view is scored persons
+        which id have been given and return rate of winner.
+        """
+        # Send not ajax request.
+
+        response = self.client.post(
+            reverse('score'),
+            {'win_id': self.person_one.id, 'loser_id': self.person_two.id},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        winner = Person.objects.get(id=self.person_one.id)
+        self.assertEqual(
+            winner.rate,
+            json.loads(
+                response.content.decode("utf-8"))[str(self.person_one.id)])
+
+    def test_score_ajax_request_taken_id_same_person(self):
+        """
+        Make shure that score view returns error
+        if have been taken two identical which belong one person.
+        """
+        # Send not ajax request.
+        with self.assertRaises(ValueError) as cm:
+            self.client.post(
+                reverse('score'),
+                {'win_id': self.person_one.id, 'loser_id': self.person_one.id},
+                HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        the_exception = cm.exception
+        self.assertIn(
+            'Argument of the score method do not must be',
+            the_exception.args[0])

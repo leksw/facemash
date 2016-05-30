@@ -62,5 +62,5 @@ def upload_image(request):
         return JsonResponse({'success': 'Files are loaded.'})
 
     return HttpResponseBadRequest(
-        content=json.dumps({'errors': 'Person is not be scored.'}),
+        content=json.dumps({'errors': 'Image has not be uploaded.'}),
         content_type="application/json")
