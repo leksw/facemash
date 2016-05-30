@@ -201,6 +201,22 @@ class HomePageTest(TestCase):
             'Image has not be uploaded.',
             json.loads(response.content.decode("utf-8"))['errors'])
 
+    def test_upload_image(self):
+        """
+        Make shure that upload_image return success message when loaded images.
+        """
+        # Send not ajax request.
+        response = self.client.post(
+            reverse('upload-images'),
+            {'quantity': 2,
+             'file[0]': test_image('upload1.jpg'),
+             'file[1]': test_image('upload2.jpg')},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        self.assertEqual(
+            'Files are loaded.',
+            json.loads(response.content.decode("utf-8"))['success'])
+
     def test_score_ajax_request(self):
         """
         Make shure that score view is scored persons
@@ -222,7 +238,7 @@ class HomePageTest(TestCase):
     def test_score_ajax_request_taken_id_same_person(self):
         """
         Make shure that score view returns error
-        if have been taken two identical which belong one person.
+        if have been taken two identical id which belong one person.
         """
         # Send not ajax request.
         with self.assertRaises(ValueError) as cm:
