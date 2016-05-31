@@ -8,3 +8,4 @@ htmlcov/
 .coverages
 facemash_data.json
 flatpages_data.json
+db.sqlite3

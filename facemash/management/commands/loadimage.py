@@ -40,7 +40,7 @@ class Command(BaseCommand):
         try:
             image_dir = os.listdir(path)
         except FileNotFoundError as err:
-            raise CommandError(err)
+            raise CommandError(err.args[1])
 
         count = 0
         for file in image_dir:

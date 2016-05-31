@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import shutil
 
 from django.core.management import call_command
+from django.core.management.base import CommandError
 from django.test import TestCase, override_settings
 from django.utils.six import StringIO
 from django.core.files.storage import FileSystemStorage
@@ -106,3 +107,18 @@ class LoadimageTest(TestCase):
         # Check that file load to database.
         person = Person.objects.count()
         self.assertEqual(person, 0)
+
+    def test_command_output_pick_folder_that_is_not(self):
+        """
+        Make shure that output error message if pick dir that is not.
+        """
+        out = StringIO()
+
+        # Run command with empty direction of images.
+        with self.assertRaises(CommandError) as cm:
+            call_command('loadimage', folder='my', stdout=out)
+
+        the_exception = cm.exception
+        self.assertIn(
+            'No such file or directory',
+            the_exception.args)
