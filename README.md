@@ -3,6 +3,8 @@ Hi there! Welcome to FACEMASH (clone)!
 
 It's example site.
 
+link to site: 
+http://aleks.pythonanywhere.com/
 
 Python 3.4.3
 
